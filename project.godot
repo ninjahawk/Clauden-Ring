@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 CameraShake="*res://scripts/CameraShake.gd"
+SoundManager="*res://scripts/SoundManager.gd"
 
 [display]
 

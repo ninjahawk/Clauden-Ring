@@ -26,6 +26,7 @@ func _on_body_entered(body: Node) -> void:
 		return
 	if body.has_method("take_damage"):
 		body.take_damage(DAMAGE)
+	SoundManager.play_projectile_impact()
 	_impact()
 
 func _impact() -> void:

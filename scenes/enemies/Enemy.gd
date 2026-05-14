@@ -92,6 +92,7 @@ func take_damage(amount: float) -> void:
 	hp = maxf(hp - amount, 0.0)
 	hit_flash_timer = HIT_FLASH_DURATION
 	_set_flash(true)
+	SoundManager.play_hit_enemy()
 	if hp_bar:
 		hp_bar.show_hit()
 	if hp <= 0.0:

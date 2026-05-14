@@ -50,10 +50,13 @@ func _input(event: InputEvent) -> void:
 			spring_arm.rotate_x(-event.relative.y * MOUSE_SENSITIVITY)
 			spring_arm.rotation.x = clampf(spring_arm.rotation.x, -PI / 3.0, PI / 4.0)
 	if event.is_action_pressed("dodge") and not is_dodging and is_on_floor() and stamina >= DODGE_COST:
+		SoundManager.play_dodge()
 		_start_dodge()
 	if event.is_action_pressed("attack_light") and attack_timer <= 0.0 and not is_dodging:
+		SoundManager.play_attack()
 		_attack_light()
 	if event.is_action_pressed("attack_heavy") and attack_timer <= 0.0 and not is_dodging and stamina >= HEAVY_STAMINA_COST:
+		SoundManager.play_attack()
 		_attack_heavy()
 	if event.is_action_pressed("lock_on"):
 		_toggle_lock()
@@ -238,6 +241,7 @@ func take_damage(amount: float) -> void:
 	if is_invincible or is_dead:
 		return
 	hp = maxf(hp - amount, 0.0)
+	SoundManager.play_hit_player()
 	CameraShake.add_trauma(clampf(amount / HP_MAX * 1.5, 0.15, 0.8))
 	if hp <= 0.0:
 		_die()
@@ -248,6 +252,7 @@ func _die() -> void:
 	is_invincible = false
 	lock_target = null
 	velocity = Vector3.ZERO
+	SoundManager.play_death()
 	CameraShake.add_trauma(1.0)
 	died.emit()
 
