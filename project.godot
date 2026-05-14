@@ -16,6 +16,10 @@ run/main_scene="res://scenes/world/Main.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+CameraShake="*res://scripts/CameraShake.gd"
+
 [display]
 
 window/size/viewport_width=1920

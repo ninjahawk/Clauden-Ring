@@ -14,6 +14,10 @@ const HP_MAX := 100.0
 const ATTACK_RANGE := 2.2
 const ATTACK_DAMAGE := 20.0
 const ATTACK_COOLDOWN := 0.6
+const HEAVY_RANGE := 3.0
+const HEAVY_DAMAGE := 35.0
+const HEAVY_COOLDOWN := 1.0
+const HEAVY_STAMINA_COST := 20.0
 const LOCK_RANGE := 15.0
 const LOCK_CAM_SPEED := 6.0
 
@@ -49,6 +53,8 @@ func _input(event: InputEvent) -> void:
 		_start_dodge()
 	if event.is_action_pressed("attack_light") and attack_timer <= 0.0 and not is_dodging:
 		_attack_light()
+	if event.is_action_pressed("attack_heavy") and attack_timer <= 0.0 and not is_dodging and stamina >= HEAVY_STAMINA_COST:
+		_attack_heavy()
 	if event.is_action_pressed("lock_on"):
 		_toggle_lock()
 	if event.is_action_pressed("ui_cancel"):
@@ -204,10 +210,35 @@ func _attack_light() -> void:
 		if body and body.has_method("take_damage"):
 			body.take_damage(ATTACK_DAMAGE)
 
+func _attack_heavy() -> void:
+	stamina -= HEAVY_STAMINA_COST
+	attack_timer = HEAVY_COOLDOWN
+	var attack_fwd: Vector3
+	if lock_target:
+		var to_target: Vector3 = lock_target.global_position - global_position
+		to_target.y = 0.0
+		attack_fwd = to_target.normalized() if to_target.length() > 0.1 else -model.global_transform.basis.z
+	else:
+		attack_fwd = -model.global_transform.basis.z
+	var hit_pos: Vector3 = global_position + Vector3(0, 1.0, 0) + attack_fwd * (HEAVY_RANGE * 0.5)
+	var space_state := get_world_3d().direct_space_state
+	var query := PhysicsShapeQueryParameters3D.new()
+	var sphere := SphereShape3D.new()
+	sphere.radius = HEAVY_RANGE * 0.5
+	query.shape = sphere
+	query.transform = Transform3D(Basis(), hit_pos)
+	query.exclude = [self]
+	for hit in space_state.intersect_shape(query, 8):
+		var body: Object = hit.get("collider")
+		if body and body.has_method("take_damage"):
+			body.take_damage(HEAVY_DAMAGE)
+	CameraShake.add_trauma(0.25)
+
 func take_damage(amount: float) -> void:
 	if is_invincible or is_dead:
 		return
 	hp = maxf(hp - amount, 0.0)
+	CameraShake.add_trauma(clampf(amount / HP_MAX * 1.5, 0.15, 0.8))
 	if hp <= 0.0:
 		_die()
 
@@ -217,6 +248,7 @@ func _die() -> void:
 	is_invincible = false
 	lock_target = null
 	velocity = Vector3.ZERO
+	CameraShake.add_trauma(1.0)
 	died.emit()
 
 func respawn() -> void:
