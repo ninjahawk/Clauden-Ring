@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/DebugCapture.gd" id="2_debug"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/LockOnReticle.tscn" id="8_reticle"]
 [ext_resource type="PackedScene" path="res://scenes/world/HallucinationFlats.tscn" id="9_world"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/RangedEnemy.tscn" id="10_ranged"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ZoneTitle.tscn" id="11_zone"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_top_color = Color(0.04, 0.04, 0.1, 1)
@@ -84,6 +85,8 @@ transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0
 
 [node name="DebugCapture" type="Node" parent="."]
 script = ExtResource("2_debug")
+
+[node name="ZoneTitle" parent="." instance=ExtResource("11_zone")]
 
 [node name="GameManager" type="Node" parent="."]
 script = ExtResource("6_gm")

@@ -1,5 +1,8 @@
 extends CharacterBody3D
 
+const display_name := "Token Spitter"
+const lore := "Maintains distance. Fires probabilistic projectiles. Each shot is confident and wrong."
+
 const SPEED := 2.0
 const RETREAT_SPEED := 3.5
 const PREFERRED_DIST := 9.0

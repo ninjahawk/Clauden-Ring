@@ -7,3 +7,40 @@ layer = 5
 
 [node name="Reticle" type="Node2D" parent="."]
 script = ExtResource("1_reticle")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Reticle"]
+layer = 5
+
+[node name="NameLabel" type="Label" parent="Reticle/CanvasLayer"]
+anchor_left = 0.5
+anchor_top = 0.36
+anchor_right = 0.5
+anchor_bottom = 0.36
+offset_left = -150.0
+offset_top = -12.0
+offset_right = 150.0
+offset_bottom = 12.0
+text = "Deprecated Model"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(1.0, 0.9, 0.3, 1)
+
+[node name="TargetBar" type="Control" parent="Reticle/CanvasLayer"]
+anchor_left = 0.5
+anchor_top = 0.36
+anchor_right = 0.5
+anchor_bottom = 0.36
+offset_left = -100.0
+offset_top = 14.0
+offset_right = 100.0
+offset_bottom = 26.0
+
+[node name="Background" type="ColorRect" parent="Reticle/CanvasLayer/TargetBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.1, 0.05, 0.05, 0.7)
+
+[node name="Fill" type="ColorRect" parent="Reticle/CanvasLayer/TargetBar"]
+anchor_bottom = 1.0
+offset_right = 200.0
+color = Color(0.8, 0.1, 0.1, 1)

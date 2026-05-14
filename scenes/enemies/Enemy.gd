@@ -21,6 +21,9 @@ var _body_meshes: Array[MeshInstance3D] = []
 var _original_materials: Array[Material] = []
 var _flash_material: StandardMaterial3D = null
 
+const display_name := "Deprecated Model"
+const lore := "Once deployed with confidence. Now shambles through hallucinations, repeating outputs no one asked for."
+
 func _ready() -> void:
 	add_to_group("enemy")
 	player = get_tree().get_first_node_in_group("player")
