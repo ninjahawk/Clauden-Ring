@@ -22,6 +22,10 @@ const LOCK_RANGE := 15.0
 const LOCK_CAM_SPEED := 6.0
 const HEAL_AMOUNT := 40.0
 const HEAL_CHARGES_MAX := 3
+const BLOCK_REDUCTION := 0.6
+const BLOCK_STAMINA_COST := 8.0
+const PARRY_WINDOW := 0.18
+const PARRY_STAGGER_DURATION := 1.8
 
 var stamina: float = STAMINA_MAX
 var hp: float = HP_MAX
@@ -34,6 +38,8 @@ var spawn_point: Vector3 = Vector3.ZERO
 var attack_timer: float = 0.0
 var lock_target: Node = null
 var heal_charges: int = HEAL_CHARGES_MAX
+var is_blocking: bool = false
+var block_raised_timer: float = 0.0  # how long block has been held
 
 @onready var model: Node3D = $Model
 @onready var cam_pivot: Node3D = $CameraPivot
@@ -81,6 +87,12 @@ func _physics_process(delta: float) -> void:
 	_regen_stamina(delta)
 	attack_timer = maxf(attack_timer - delta, 0.0)
 	_update_lock(delta)
+	is_blocking = Input.is_action_pressed("block") and not is_dodging and stamina > 0.0
+	if is_blocking:
+		block_raised_timer += delta
+		stamina = maxf(stamina - BLOCK_STAMINA_COST * delta, 0.0)
+	else:
+		block_raised_timer = 0.0
 
 	if is_dodging:
 		_tick_dodge(delta)
@@ -247,11 +259,36 @@ func _attack_heavy() -> void:
 func take_damage(amount: float) -> void:
 	if is_invincible or is_dead:
 		return
+	if is_blocking:
+		if block_raised_timer <= PARRY_WINDOW:
+			# Perfect parry
+			_do_parry()
+			return
+		# Regular block — reduce damage
+		amount *= (1.0 - BLOCK_REDUCTION)
+		CameraShake.add_trauma(0.1)
 	hp = maxf(hp - amount, 0.0)
 	SoundManager.play_hit_player()
 	CameraShake.add_trauma(clampf(amount / HP_MAX * 1.5, 0.15, 0.8))
 	if hp <= 0.0:
 		_die()
+
+func _do_parry() -> void:
+	CameraShake.add_trauma(0.2)
+	# Stagger nearest attacker
+	var best: Node = null
+	var best_dist: float = 3.5
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		if enemy.get("is_dead"):
+			continue
+		var d: float = enemy.global_position.distance_to(global_position)
+		if d < best_dist:
+			best_dist = d
+			best = enemy
+	if best and best.has_method("_tick_stagger"):
+		best.set("is_staggered", true)
+		best.set("stagger_timer", PARRY_STAGGER_DURATION)
+		best.set("poise", best.get("POISE_MAX"))
 
 func _die() -> void:
 	is_dead = true
