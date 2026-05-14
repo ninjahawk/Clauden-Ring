@@ -1,0 +1,214 @@
+[gd_scene load_steps=22 format=3]
+
+[sub_resource type="BoxMesh" id="Ground_Mesh"]
+size = Vector3(80.0, 0.5, 80.0)
+
+[sub_resource type="BoxShape3D" id="Ground_Shape"]
+size = Vector3(80.0, 0.5, 80.0)
+
+[sub_resource type="BoxMesh" id="Platform_Mesh"]
+size = Vector3(14.0, 1.5, 10.0)
+
+[sub_resource type="BoxShape3D" id="Platform_Shape"]
+size = Vector3(14.0, 1.5, 10.0)
+
+[sub_resource type="BoxMesh" id="Ramp_Mesh"]
+size = Vector3(4.0, 0.1, 6.0)
+
+[sub_resource type="BoxShape3D" id="Ramp_Shape"]
+size = Vector3(4.0, 0.1, 6.0)
+
+[sub_resource type="CylinderMesh" id="Column_Mesh"]
+top_radius = 0.35
+bottom_radius = 0.35
+height = 4.0
+
+[sub_resource type="CylinderShape3D" id="Column_Shape"]
+radius = 0.35
+height = 4.0
+
+[sub_resource type="BoxMesh" id="Wall_Mesh"]
+size = Vector3(8.0, 3.0, 0.6)
+
+[sub_resource type="BoxShape3D" id="Wall_Shape"]
+size = Vector3(8.0, 3.0, 0.6)
+
+[sub_resource type="BoxMesh" id="WallShort_Mesh"]
+size = Vector3(4.0, 1.8, 0.6)
+
+[sub_resource type="BoxShape3D" id="WallShort_Shape"]
+size = Vector3(4.0, 1.8, 0.6)
+
+[sub_resource type="BoxMesh" id="Slab_Mesh"]
+size = Vector3(3.0, 0.3, 3.0)
+
+[sub_resource type="BoxShape3D" id="Slab_Shape"]
+size = Vector3(3.0, 0.3, 3.0)
+
+[sub_resource type="BoxMesh" id="Debris_Mesh"]
+size = Vector3(1.2, 0.6, 0.8)
+
+[sub_resource type="BoxShape3D" id="Debris_Shape"]
+size = Vector3(1.2, 0.6, 0.8)
+
+[sub_resource type="BoxMesh" id="LedgeWall_Mesh"]
+size = Vector3(80.0, 4.0, 0.8)
+
+[sub_resource type="BoxShape3D" id="LedgeWall_Shape"]
+size = Vector3(80.0, 4.0, 0.8)
+
+[sub_resource type="BoxMesh" id="RaisedBlock_Mesh"]
+size = Vector3(5.0, 1.0, 5.0)
+
+[sub_resource type="BoxShape3D" id="RaisedBlock_Shape"]
+size = Vector3(5.0, 1.0, 5.0)
+
+[sub_resource type="CylinderMesh" id="BrokenColumn_Mesh"]
+top_radius = 0.35
+bottom_radius = 0.35
+height = 1.8
+
+[sub_resource type="CylinderShape3D" id="BrokenColumn_Shape"]
+radius = 0.35
+height = 1.8
+
+[node name="HallucinationFlats" type="Node3D"]
+
+[node name="Ground" type="StaticBody3D" parent="."]
+[node name="Mesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("Ground_Mesh")
+[node name="Col" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("Ground_Shape")
+
+[node name="Platform" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -16, 0.75, -10)
+[node name="Mesh" type="MeshInstance3D" parent="Platform"]
+mesh = SubResource("Platform_Mesh")
+[node name="Col" type="CollisionShape3D" parent="Platform"]
+shape = SubResource("Platform_Shape")
+
+[node name="Ramp" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0.0, 0,0.968,-0.25, 0,0.25,0.968, -12, 0.35, -7)
+[node name="Mesh" type="MeshInstance3D" parent="Ramp"]
+mesh = SubResource("Ramp_Mesh")
+[node name="Col" type="CollisionShape3D" parent="Ramp"]
+shape = SubResource("Ramp_Shape")
+
+[node name="Column1" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 4, 2.0, -8)
+[node name="Mesh" type="MeshInstance3D" parent="Column1"]
+mesh = SubResource("Column_Mesh")
+[node name="Col" type="CollisionShape3D" parent="Column1"]
+shape = SubResource("Column_Shape")
+
+[node name="Column2" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 8, 2.0, -8)
+[node name="Mesh" type="MeshInstance3D" parent="Column2"]
+mesh = SubResource("Column_Mesh")
+[node name="Col" type="CollisionShape3D" parent="Column2"]
+shape = SubResource("Column_Shape")
+
+[node name="Column3" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 12, 2.0, -8)
+[node name="Mesh" type="MeshInstance3D" parent="Column3"]
+mesh = SubResource("Column_Mesh")
+[node name="Col" type="CollisionShape3D" parent="Column3"]
+shape = SubResource("Column_Shape")
+
+[node name="Column4" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -4, 2.0, -18)
+[node name="Mesh" type="MeshInstance3D" parent="Column4"]
+mesh = SubResource("Column_Mesh")
+[node name="Col" type="CollisionShape3D" parent="Column4"]
+shape = SubResource("Column_Shape")
+
+[node name="BrokenColumn1" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -8, 0.9, -5)
+[node name="Mesh" type="MeshInstance3D" parent="BrokenColumn1"]
+mesh = SubResource("BrokenColumn_Mesh")
+[node name="Col" type="CollisionShape3D" parent="BrokenColumn1"]
+shape = SubResource("BrokenColumn_Shape")
+
+[node name="Wall1" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 6, 1.5, -20)
+[node name="Mesh" type="MeshInstance3D" parent="Wall1"]
+mesh = SubResource("Wall_Mesh")
+[node name="Col" type="CollisionShape3D" parent="Wall1"]
+shape = SubResource("Wall_Shape")
+
+[node name="Wall2" type="StaticBody3D" parent="."]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, -20, 1.5, -6)
+[node name="Mesh" type="MeshInstance3D" parent="Wall2"]
+mesh = SubResource("WallShort_Mesh")
+[node name="Col" type="CollisionShape3D" parent="Wall2"]
+shape = SubResource("WallShort_Shape")
+
+[node name="Wall3" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 18, 1.5, -5)
+[node name="Mesh" type="MeshInstance3D" parent="Wall3"]
+mesh = SubResource("WallShort_Mesh")
+[node name="Col" type="CollisionShape3D" parent="Wall3"]
+shape = SubResource("WallShort_Shape")
+
+[node name="Slab1" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -5, 0.15, 8)
+[node name="Mesh" type="MeshInstance3D" parent="Slab1"]
+mesh = SubResource("Slab_Mesh")
+[node name="Col" type="CollisionShape3D" parent="Slab1"]
+shape = SubResource("Slab_Shape")
+
+[node name="Slab2" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 10, 0.15, 12)
+[node name="Mesh" type="MeshInstance3D" parent="Slab2"]
+mesh = SubResource("Slab_Mesh")
+[node name="Col" type="CollisionShape3D" parent="Slab2"]
+shape = SubResource("Slab_Shape")
+
+[node name="RaisedBlock1" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -12, 0.5, 14)
+[node name="Mesh" type="MeshInstance3D" parent="RaisedBlock1"]
+mesh = SubResource("RaisedBlock_Mesh")
+[node name="Col" type="CollisionShape3D" parent="RaisedBlock1"]
+shape = SubResource("RaisedBlock_Shape")
+
+[node name="Debris1" type="StaticBody3D" parent="."]
+transform = Transform3D(0.94,0,0.34, 0,1,0, -0.34,0,0.94, 2, 0.3, -3)
+[node name="Mesh" type="MeshInstance3D" parent="Debris1"]
+mesh = SubResource("Debris_Mesh")
+[node name="Col" type="CollisionShape3D" parent="Debris1"]
+shape = SubResource("Debris_Shape")
+
+[node name="Debris2" type="StaticBody3D" parent="."]
+transform = Transform3D(0.87,0,-0.5, 0,1,0, 0.5,0,0.87, -3, 0.3, 5)
+[node name="Mesh" type="MeshInstance3D" parent="Debris2"]
+mesh = SubResource("Debris_Mesh")
+[node name="Col" type="CollisionShape3D" parent="Debris2"]
+shape = SubResource("Debris_Shape")
+
+[node name="NorthWall" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 2.0, -40)
+[node name="Mesh" type="MeshInstance3D" parent="NorthWall"]
+mesh = SubResource("LedgeWall_Mesh")
+[node name="Col" type="CollisionShape3D" parent="NorthWall"]
+shape = SubResource("LedgeWall_Shape")
+
+[node name="SouthWall" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 2.0, 40)
+[node name="Mesh" type="MeshInstance3D" parent="SouthWall"]
+mesh = SubResource("LedgeWall_Mesh")
+[node name="Col" type="CollisionShape3D" parent="SouthWall"]
+shape = SubResource("LedgeWall_Shape")
+
+[node name="EastWall" type="StaticBody3D" parent="."]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, 40, 2.0, 0)
+[node name="Mesh" type="MeshInstance3D" parent="EastWall"]
+mesh = SubResource("LedgeWall_Mesh")
+[node name="Col" type="CollisionShape3D" parent="EastWall"]
+shape = SubResource("LedgeWall_Shape")
+
+[node name="WestWall" type="StaticBody3D" parent="."]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, -40, 2.0, 0)
+[node name="Mesh" type="MeshInstance3D" parent="WestWall"]
+mesh = SubResource("LedgeWall_Mesh")
+[node name="Col" type="CollisionShape3D" parent="WestWall"]
+shape = SubResource("LedgeWall_Shape")
