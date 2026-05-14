@@ -1,0 +1,34 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scenes/enemies/EnemyHPBar.gd" id="1_hpbar"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_bg"]
+size = Vector2(1.0, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_bg"]
+transparency = 1
+albedo_color = Color(0.1, 0.1, 0.1, 0.7)
+shading_mode = 0
+billboard_mode = 1
+no_depth_test = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_fill"]
+size = Vector2(1.0, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_fill"]
+transparency = 1
+albedo_color = Color(0.8, 0.1, 0.1, 1.0)
+shading_mode = 0
+billboard_mode = 1
+no_depth_test = true
+
+[node name="EnemyHPBar" type="Node3D"]
+script = ExtResource("1_hpbar")
+
+[node name="Background" type="MeshInstance3D" parent="."]
+mesh = SubResource("QuadMesh_bg")
+surface_material_override/0 = SubResource("Mat_bg")
+
+[node name="Fill" type="MeshInstance3D" parent="."]
+mesh = SubResource("QuadMesh_fill")
+surface_material_override/0 = SubResource("Mat_fill")

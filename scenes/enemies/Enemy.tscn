@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scenes/enemies/Enemy.gd" id="1_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/EnemyHPBar.tscn" id="2_hpbar"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape_1"]
 radius = 0.4
@@ -30,3 +31,6 @@ mesh = SubResource("CapsuleMesh_1")
 [node name="Head" type="MeshInstance3D" parent="Model"]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.72, 0.0)
 mesh = SubResource("SphereMesh_1")
+
+[node name="EnemyHPBar" parent="." instance=ExtResource("2_hpbar")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2.2, 0.0)
