@@ -1,8 +1,12 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/DebugCapture.gd" id="2_debug"]
 [ext_resource type="PackedScene" path="res://scenes/ui/DebugHUD.tscn" id="3_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/StatusBars.tscn" id="4_status"]
+[ext_resource type="PackedScene" path="res://scenes/ui/DeathScreen.tscn" id="5_death"]
+[ext_resource type="Script" path="res://scripts/GameManager.gd" id="6_gm"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/Enemy.tscn" id="7_enemy"]
 
 [sub_resource type="Environment" id="Environment_1"]
 background_mode = 1
@@ -39,7 +43,17 @@ shape = SubResource("BoxShape_1")
 [node name="Player" parent="." instance=ExtResource("1_player")]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0)
 
+[node name="Enemy" parent="." instance=ExtResource("7_enemy")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 6.0, 1.0, 0.0)
+
+[node name="StatusBars" parent="." instance=ExtResource("4_status")]
+
+[node name="DeathScreen" parent="." instance=ExtResource("5_death")]
+
 [node name="DebugHUD" parent="." instance=ExtResource("3_hud")]
 
 [node name="DebugCapture" type="Node" parent="."]
 script = ExtResource("2_debug")
+
+[node name="GameManager" type="Node" parent="."]
+script = ExtResource("6_gm")

@@ -5,6 +5,13 @@ var player: Node = null
 
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
+	visible = false  # toggle with F1
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_end"):  # F1 in Godot default map? use key directly
+		pass
+	if event is InputEventKey and event.pressed and event.physical_keycode == KEY_F1:
+		visible = not visible
 
 func _process(_delta: float) -> void:
 	if not player:

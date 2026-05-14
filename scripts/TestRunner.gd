@@ -27,6 +27,7 @@ func _run_all() -> void:
 	await _test_iframes()
 	await _test_input_move()
 	await _test_input_dodge()
+	await _test_death_and_respawn()
 	_print_results()
 	get_tree().quit()
 
@@ -99,6 +100,20 @@ func _test_input_dodge() -> void:
 	await _screenshot("input_dodge")
 	Input.action_release("move_forward")
 	await get_tree().create_timer(player.DODGE_DURATION + 0.1).timeout
+
+func _test_death_and_respawn() -> void:
+	await _reset()
+	_assert("player starts alive", not player.is_dead)
+	player.take_damage(player.HP_MAX)
+	_assert("fatal damage sets is_dead", player.is_dead)
+	_assert("HP is zero on death", player.hp <= 0.0)
+	# Respawn directly (skip death screen animation in tests)
+	player.call("respawn")
+	await get_tree().physics_frame
+	_assert("hp restored after respawn", player.hp == player.HP_MAX)
+	_assert("is_dead cleared after respawn", not player.is_dead)
+	_assert("position near spawn point after respawn",
+		player.global_position.distance_to(player.spawn_point) < 1.0)
 
 # --- Helpers ---
 
