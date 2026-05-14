@@ -17,10 +17,12 @@ var dodge_timer: float = 0.0
 var dodge_dir: Vector3 = Vector3.ZERO
 var is_invincible: bool = false
 
+@onready var model: Node3D = $Model
 @onready var cam_pivot: Node3D = $CameraPivot
 @onready var spring_arm: SpringArm3D = $CameraPivot/SpringArm3D
 
 func _ready() -> void:
+	add_to_group("player")
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _input(event: InputEvent) -> void:
@@ -28,6 +30,9 @@ func _input(event: InputEvent) -> void:
 		cam_pivot.rotate_y(-event.relative.x * MOUSE_SENSITIVITY)
 		spring_arm.rotate_x(-event.relative.y * MOUSE_SENSITIVITY)
 		spring_arm.rotation.x = clampf(spring_arm.rotation.x, -PI / 3.0, PI / 4.0)
+	# Dodge triggers in _input so it fires immediately on keypress, not on physics tick
+	if event.is_action_pressed("dodge") and not is_dodging and is_on_floor() and stamina >= DODGE_COST:
+		_start_dodge()
 	if event.is_action_pressed("ui_cancel"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
@@ -43,8 +48,6 @@ func _physics_process(delta: float) -> void:
 		_tick_dodge(delta)
 	else:
 		_handle_movement(delta)
-		if Input.is_action_just_pressed("dodge") and is_on_floor() and stamina >= DODGE_COST:
-			_start_dodge()
 
 	move_and_slide()
 
@@ -58,12 +61,18 @@ func _start_dodge() -> void:
 	is_invincible = true
 	dodge_timer = DODGE_DURATION
 	var dir := _camera_relative_input()
-	dodge_dir = dir if dir != Vector3.ZERO else -global_transform.basis.z
+	dodge_dir = dir if dir != Vector3.ZERO else -cam_pivot.global_transform.basis.z
+	dodge_dir.y = 0.0
+	if dodge_dir != Vector3.ZERO:
+		dodge_dir = dodge_dir.normalized()
+	else:
+		dodge_dir = Vector3(0.0, 0.0, 1.0)
+	model.rotation.y = atan2(dodge_dir.x, dodge_dir.z)
 
 func _tick_dodge(delta: float) -> void:
-	dodge_timer -= delta
 	velocity.x = dodge_dir.x * DODGE_SPEED
 	velocity.z = dodge_dir.z * DODGE_SPEED
+	dodge_timer -= delta
 	if dodge_timer <= 0.0:
 		is_dodging = false
 		is_invincible = false
@@ -73,7 +82,8 @@ func _handle_movement(delta: float) -> void:
 	if dir != Vector3.ZERO:
 		velocity.x = dir.x * SPEED
 		velocity.z = dir.z * SPEED
-		rotation.y = lerp_angle(rotation.y, atan2(dir.x, dir.z), 12.0 * delta)
+		var target_y := atan2(dir.x, dir.z)
+		model.rotation.y = lerp_angle(model.rotation.y, target_y, 12.0 * delta)
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, SPEED)
 		velocity.z = move_toward(velocity.z, 0.0, SPEED)

@@ -1,4 +1,4 @@
-extends Node
+﻿extends Node
 
 const ENABLED := false
 const QUIT_AFTER := false
@@ -14,3 +14,7 @@ func _ready() -> void:
 	print("Screenshot saved to: ", ProjectSettings.globalize_path(SCREENSHOT_PATH))
 	if QUIT_AFTER:
 		get_tree().quit()
+
+
+
+

@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/DebugCapture.gd" id="2_debug"]
 [ext_resource type="PackedScene" path="res://scenes/ui/DebugHUD.tscn" id="3_hud"]
+[ext_resource type="Script" path="res://scripts/TestRunner.gd" id="4_runner"]
 
 [sub_resource type="Environment" id="Environment_1"]
 background_mode = 1
@@ -12,19 +13,18 @@ ambient_light/color = Color(0.2, 0.2, 0.3, 1)
 ambient_light/energy = 0.5
 
 [sub_resource type="BoxMesh" id="BoxMesh_1"]
-size = Vector3(40.0, 0.5, 40.0)
+size = Vector3(200.0, 0.5, 200.0)
 
 [sub_resource type="BoxShape3D" id="BoxShape_1"]
-size = Vector3(40.0, 0.5, 40.0)
+size = Vector3(200.0, 0.5, 200.0)
 
-[node name="Main" type="Node3D"]
+[node name="TestScene" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_1")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866, -0.354, 0.354, 0.0, 0.707, 0.707, -0.5, -0.612, 0.612, 0.0, 15.0, 0.0)
-light_color = Color(0.9, 0.85, 1.0, 1.0)
 light_energy = 1.2
 shadow_enabled = true
 
@@ -43,3 +43,6 @@ transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0
 
 [node name="DebugCapture" type="Node" parent="."]
 script = ExtResource("2_debug")
+
+[node name="TestRunner" type="Node" parent="."]
+script = ExtResource("4_runner")
