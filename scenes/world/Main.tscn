@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/DebugCapture.gd" id="2_debug"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/Enemy.tscn" id="7_enemy"]
 [ext_resource type="PackedScene" path="res://scenes/ui/LockOnReticle.tscn" id="8_reticle"]
 [ext_resource type="PackedScene" path="res://scenes/world/HallucinationFlats.tscn" id="9_world"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/RangedEnemy.tscn" id="10_ranged"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_top_color = Color(0.04, 0.04, 0.1, 1)
@@ -63,6 +64,12 @@ transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -8.0, 1.0, 
 
 [node name="Enemy3" parent="." instance=ExtResource("7_enemy")]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 12.0, 1.0, -15.0)
+
+[node name="RangedEnemy1" parent="." instance=ExtResource("10_ranged")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -5.0, 1.0, -18.0)
+
+[node name="RangedEnemy2" parent="." instance=ExtResource("10_ranged")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 15.0, 1.0, -8.0)
 
 [node name="Player" parent="." instance=ExtResource("1_player")]
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0)
