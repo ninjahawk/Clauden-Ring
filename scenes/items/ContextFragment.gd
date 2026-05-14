@@ -26,6 +26,8 @@ func _on_body_entered(body: Node) -> void:
 		return
 	collected = true
 	# Show item popup via UI
+	var cur_frags: int = int(body.get("context_fragments"))
+	body.set("context_fragments", cur_frags + 1)
 	var popup := get_tree().get_first_node_in_group("item_popup")
 	if popup:
 		popup.show_item(ITEM_NAME, ITEM_DESC)

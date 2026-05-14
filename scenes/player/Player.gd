@@ -40,7 +40,9 @@ var lock_target: Node = null
 var _prev_lock_target: Node = null
 var heal_charges: int = HEAL_CHARGES_MAX
 var is_blocking: bool = false
-var block_raised_timer: float = 0.0  # how long block has been held
+var block_raised_timer: float = 0.0
+var context_fragments: int = 0
+var collapse_cooldown: float = 0.0
 
 @onready var model: Node3D = $Model
 @onready var cam_pivot: Node3D = $CameraPivot
@@ -70,6 +72,8 @@ func _input(event: InputEvent) -> void:
 		_attack_heavy()
 	if event.is_action_pressed("lock_on"):
 		_toggle_lock()
+	if event.is_action_pressed("context_collapse") and context_fragments > 0 and collapse_cooldown <= 0.0 and not is_dead:
+		_context_collapse()
 	if event.is_action_pressed("use_item") and heal_charges > 0 and hp < HP_MAX and not is_dead:
 		heal_charges -= 1
 		hp = minf(hp + HEAL_AMOUNT, HP_MAX)
@@ -87,6 +91,7 @@ func _physics_process(delta: float) -> void:
 
 	_regen_stamina(delta)
 	attack_timer = maxf(attack_timer - delta, 0.0)
+	collapse_cooldown = maxf(collapse_cooldown - delta, 0.0)
 	_update_lock(delta)
 	is_blocking = Input.is_action_pressed("block") and not is_dodging and stamina > 0.0
 	if is_blocking:
@@ -302,6 +307,23 @@ func take_damage(amount: float) -> void:
 	CameraShake.add_trauma(clampf(amount / HP_MAX * 1.5, 0.15, 0.8))
 	if hp <= 0.0:
 		_die()
+
+func _context_collapse() -> void:
+	context_fragments -= 1
+	collapse_cooldown = 2.0
+	is_invincible = true
+	# Teleport 8-12 units in the camera-forward direction, or behind current position
+	var cam_fwd := -cam_pivot.global_transform.basis.z
+	cam_fwd.y = 0.0
+	if cam_fwd.length_squared() > 0.0:
+		cam_fwd = cam_fwd.normalized()
+	var offset := cam_fwd * 10.0
+	global_position += offset
+	velocity = Vector3.ZERO
+	CameraShake.add_trauma(0.35)
+	# Brief i-frames
+	await get_tree().create_timer(0.3).timeout
+	is_invincible = false
 
 func _do_parry() -> void:
 	CameraShake.add_trauma(0.2)

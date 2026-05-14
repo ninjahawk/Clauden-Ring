@@ -43,7 +43,9 @@ func _process(delta: float) -> void:
 		drain_stamina = displayed_stamina
 	var charges: int = int(player.get("heal_charges"))
 	var max_charges: int = int(player.get("HEAL_CHARGES_MAX"))
-	charge_label.text = "GPU Credits: " + str(charges) + " / " + str(max_charges)
+	var frags: int = int(player.get("context_fragments"))
+	var frag_str := "  ◆×" + str(frags) if frags > 0 else ""
+	charge_label.text = "GPU Credits: " + str(charges) + " / " + str(max_charges) + frag_str
 
 func _style_bar(bar: ProgressBar, fill: Color, bg: Color) -> void:
 	var fill_style := StyleBoxFlat.new()
