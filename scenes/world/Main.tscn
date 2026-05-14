@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/DebugCapture.gd" id="2_debug"]
@@ -11,6 +11,9 @@
 [ext_resource type="PackedScene" path="res://scenes/world/HallucinationFlats.tscn" id="9_world"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/RangedEnemy.tscn" id="10_ranged"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ZoneTitle.tscn" id="11_zone"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/Boss.tscn" id="12_boss"]
+[ext_resource type="PackedScene" path="res://scenes/ui/BossHPBar.tscn" id="13_bossbar"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ItemPopup.tscn" id="14_popup"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_top_color = Color(0.04, 0.04, 0.1, 1)
@@ -86,7 +89,14 @@ transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0
 [node name="DebugCapture" type="Node" parent="."]
 script = ExtResource("2_debug")
 
+[node name="Boss" parent="." instance=ExtResource("12_boss")]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.5, -28.0)
+
 [node name="ZoneTitle" parent="." instance=ExtResource("11_zone")]
+
+[node name="BossHPBar" parent="." instance=ExtResource("13_bossbar")]
+
+[node name="ItemPopup" parent="." instance=ExtResource("14_popup")]
 
 [node name="GameManager" type="Node" parent="."]
 script = ExtResource("6_gm")
