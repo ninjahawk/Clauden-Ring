@@ -8,12 +8,18 @@ const ATTACK_COOLDOWN := 1.2
 const GRAVITY := 20.0
 const HP_MAX := 40.0
 const HIT_FLASH_DURATION := 0.12
+const POISE_MAX := 30.0
+const POISE_REGEN := 15.0
+const STAGGER_DURATION := 0.45
 
 var hp: float = HP_MAX
 var attack_timer: float = 0.0
 var player: Node = null
 var is_dead: bool = false
 var hit_flash_timer: float = 0.0
+var poise: float = POISE_MAX
+var stagger_timer: float = 0.0
+var is_staggered: bool = false
 
 @onready var model: Node3D = $Model
 @onready var hp_bar: Node3D = $EnemyHPBar
@@ -45,6 +51,7 @@ func _physics_process(delta: float) -> void:
 		return
 
 	_tick_hit_flash(delta)
+	_tick_stagger(delta)
 
 	if not is_on_floor():
 		velocity.y -= GRAVITY * delta
@@ -63,6 +70,12 @@ func _physics_process(delta: float) -> void:
 	to_player.y = 0.0
 	var dist: float = to_player.length()
 
+	if is_staggered:
+		velocity.x = move_toward(velocity.x, 0.0, SPEED * 2.0)
+		velocity.z = move_toward(velocity.z, 0.0, SPEED * 2.0)
+		move_and_slide()
+		return
+
 	if dist <= ATTACK_RANGE:
 		velocity.x = move_toward(velocity.x, 0.0, SPEED)
 		velocity.z = move_toward(velocity.z, 0.0, SPEED)
@@ -80,6 +93,14 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
+func _tick_stagger(delta: float) -> void:
+	if is_staggered:
+		stagger_timer -= delta
+		if stagger_timer <= 0.0:
+			is_staggered = false
+	elif poise < POISE_MAX:
+		poise = minf(poise + POISE_REGEN * delta, POISE_MAX)
+
 func _tick_hit_flash(delta: float) -> void:
 	if hit_flash_timer > 0.0:
 		hit_flash_timer -= delta
@@ -93,6 +114,11 @@ func take_damage(amount: float) -> void:
 	hit_flash_timer = HIT_FLASH_DURATION
 	_set_flash(true)
 	SoundManager.play_hit_enemy()
+	poise -= amount
+	if poise <= 0.0 and not is_staggered:
+		is_staggered = true
+		stagger_timer = STAGGER_DURATION
+		poise = POISE_MAX
 	if hp_bar:
 		hp_bar.show_hit()
 	if hp <= 0.0:

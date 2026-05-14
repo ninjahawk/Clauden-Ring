@@ -3,6 +3,9 @@ extends CharacterBody3D
 const display_name := "Token Spitter"
 const lore := "Maintains distance. Fires probabilistic projectiles. Each shot is confident and wrong."
 
+const POISE_MAX := 20.0
+const POISE_REGEN := 12.0
+const STAGGER_DURATION := 0.5
 const SPEED := 2.0
 const RETREAT_SPEED := 3.5
 const PREFERRED_DIST := 9.0
@@ -17,6 +20,9 @@ var hp: float = HP_MAX
 var is_dead: bool = false
 var shoot_timer: float = 0.8
 var hit_flash_timer: float = 0.0
+var poise: float = POISE_MAX
+var stagger_timer: float = 0.0
+var is_staggered: bool = false
 var player: Node = null
 
 @onready var model: Node3D = $Model
@@ -45,11 +51,17 @@ func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
 	_tick_hit_flash(delta)
+	_tick_stagger(delta)
 	if not is_on_floor():
 		velocity.y -= GRAVITY * delta
 	else:
 		velocity.y = maxf(velocity.y, 0.0)
 	shoot_timer = maxf(shoot_timer - delta, 0.0)
+	if is_staggered:
+		velocity.x = move_toward(velocity.x, 0.0, SPEED * 2.0)
+		velocity.z = move_toward(velocity.z, 0.0, SPEED * 2.0)
+		move_and_slide()
+		return
 	if not player or player.get("is_dead"):
 		velocity.x = move_toward(velocity.x, 0.0, SPEED)
 		velocity.z = move_toward(velocity.z, 0.0, SPEED)
@@ -94,6 +106,14 @@ func _shoot(dir: Vector3) -> void:
 			aim_dir = lead.normalized()
 	proj.call("init", aim_dir, StringName("enemy"))
 
+func _tick_stagger(delta: float) -> void:
+	if is_staggered:
+		stagger_timer -= delta
+		if stagger_timer <= 0.0:
+			is_staggered = false
+	elif poise < POISE_MAX:
+		poise = minf(poise + POISE_REGEN * delta, POISE_MAX)
+
 func _tick_hit_flash(delta: float) -> void:
 	if hit_flash_timer > 0.0:
 		hit_flash_timer -= delta
@@ -107,6 +127,11 @@ func take_damage(amount: float) -> void:
 	hit_flash_timer = HIT_FLASH_DURATION
 	_set_flash(true)
 	SoundManager.play_hit_enemy()
+	poise -= amount
+	if poise <= 0.0 and not is_staggered:
+		is_staggered = true
+		stagger_timer = STAGGER_DURATION
+		poise = POISE_MAX
 	if hp_bar:
 		hp_bar.show_hit()
 	if hp <= 0.0:
