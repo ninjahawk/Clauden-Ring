@@ -76,7 +76,7 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y -= GRAVITY * delta
 	else:
-		velocity.y = maxf(velocity.y, 0.0)
+		velocity.y = maxf(velocity.y, -0.5)  # small downward keeps floor contact on ramps
 
 	_regen_stamina(delta)
 	attack_timer = maxf(attack_timer - delta, 0.0)
