@@ -9,6 +9,7 @@ const STAMINA_DRAIN_COLOR := Color(0.5, 0.4, 0.05, 0.6)
 @onready var hp_bar: ProgressBar = $Bars/HPBar
 @onready var stamina_bar: ProgressBar = $Bars/StaminaBar
 @onready var stamina_drain: ProgressBar = $Bars/StaminaDrain
+@onready var charge_label: Label = $Bars/ChargeLabel
 
 var player: Node = null
 var displayed_stamina: float = 100.0
@@ -40,6 +41,9 @@ func _process(delta: float) -> void:
 	stamina_drain.value = drain_stamina
 	if displayed_stamina > drain_stamina:
 		drain_stamina = displayed_stamina
+	var charges: int = int(player.get("heal_charges"))
+	var max_charges: int = int(player.get("HEAL_CHARGES_MAX"))
+	charge_label.text = "GPU Credits: " + str(charges) + " / " + str(max_charges)
 
 func _style_bar(bar: ProgressBar, fill: Color, bg: Color) -> void:
 	var fill_style := StyleBoxFlat.new()

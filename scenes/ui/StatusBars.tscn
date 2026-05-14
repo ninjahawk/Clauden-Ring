@@ -38,3 +38,11 @@ offset_bottom = 58.0
 min_value = 0.0
 max_value = 100.0
 value = 100.0
+
+[node name="ChargeLabel" type="Label" parent="Bars"]
+anchor_right = 1.0
+offset_top = 64.0
+offset_bottom = 82.0
+text = "GPU Credits: 3 / 3"
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.5, 0.8, 0.5, 0.9)

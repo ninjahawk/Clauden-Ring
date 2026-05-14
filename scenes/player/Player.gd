@@ -20,6 +20,8 @@ const HEAVY_COOLDOWN := 1.0
 const HEAVY_STAMINA_COST := 20.0
 const LOCK_RANGE := 15.0
 const LOCK_CAM_SPEED := 6.0
+const HEAL_AMOUNT := 40.0
+const HEAL_CHARGES_MAX := 3
 
 var stamina: float = STAMINA_MAX
 var hp: float = HP_MAX
@@ -31,6 +33,7 @@ var is_dead: bool = false
 var spawn_point: Vector3 = Vector3.ZERO
 var attack_timer: float = 0.0
 var lock_target: Node = null
+var heal_charges: int = HEAL_CHARGES_MAX
 
 @onready var model: Node3D = $Model
 @onready var cam_pivot: Node3D = $CameraPivot
@@ -60,6 +63,10 @@ func _input(event: InputEvent) -> void:
 		_attack_heavy()
 	if event.is_action_pressed("lock_on"):
 		_toggle_lock()
+	if event.is_action_pressed("use_item") and heal_charges > 0 and hp < HP_MAX and not is_dead:
+		heal_charges -= 1
+		hp = minf(hp + HEAL_AMOUNT, HP_MAX)
+		CameraShake.add_trauma(0.1)
 	if event.is_action_pressed("ui_cancel"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
@@ -261,6 +268,7 @@ func respawn() -> void:
 	velocity = Vector3.ZERO
 	hp = HP_MAX
 	stamina = STAMINA_MAX
+	heal_charges = HEAL_CHARGES_MAX
 	is_dead = false
 	is_dodging = false
 	is_invincible = false
