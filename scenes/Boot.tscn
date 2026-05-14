@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/Boot.gd" id="1_boot"]
+[ext_resource type="Script" path="res://scripts/DebugCapture.gd" id="2_debug"]
+
+[node name="Boot" type="Node"]
+script = ExtResource("1_boot")
+
+[node name="DebugCapture" type="Node" parent="."]
+script = ExtResource("2_debug")
