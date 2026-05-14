@@ -37,6 +37,7 @@ var is_dead: bool = false
 var spawn_point: Vector3 = Vector3.ZERO
 var attack_timer: float = 0.0
 var lock_target: Node = null
+var _prev_lock_target: Node = null
 var heal_charges: int = HEAL_CHARGES_MAX
 var is_blocking: bool = false
 var block_raised_timer: float = 0.0  # how long block has been held
@@ -136,7 +137,36 @@ func _find_best_lock_target() -> Node:
 			best = enemy
 	return best
 
+func _update_lock_outline() -> void:
+	if lock_target != _prev_lock_target:
+		if _prev_lock_target and is_instance_valid(_prev_lock_target):
+			_set_outline(_prev_lock_target, false)
+		if lock_target and is_instance_valid(lock_target):
+			_set_outline(lock_target, true)
+		_prev_lock_target = lock_target
+
+func _set_outline(target: Node, on: bool) -> void:
+	var model: Node = target.get_node_or_null("Model")
+	if not model:
+		return
+	for child in model.get_children():
+		var mi := child as MeshInstance3D
+		if not mi:
+			continue
+		var mat := mi.get_active_material(0) as StandardMaterial3D
+		if not mat:
+			continue
+		var new_mat := mat.duplicate() as StandardMaterial3D
+		if on:
+			new_mat.rim_enabled = true
+			new_mat.rim = 0.8
+			new_mat.rim_tint = 0.4
+		else:
+			new_mat.rim_enabled = false
+		mi.set_surface_override_material(0, new_mat)
+
 func _update_lock(delta: float) -> void:
+	_update_lock_outline()
 	if not lock_target:
 		return
 	if lock_target.get("is_dead"):
