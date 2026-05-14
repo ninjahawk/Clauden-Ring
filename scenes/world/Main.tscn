@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/DebugCapture.gd" id="2_debug"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/DeathScreen.tscn" id="5_death"]
 [ext_resource type="Script" path="res://scripts/GameManager.gd" id="6_gm"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/Enemy.tscn" id="7_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/ui/LockOnReticle.tscn" id="8_reticle"]
 
 [sub_resource type="Environment" id="Environment_1"]
 background_mode = 1
@@ -47,6 +48,8 @@ transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0
 transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 6.0, 1.0, 0.0)
 
 [node name="StatusBars" parent="." instance=ExtResource("4_status")]
+
+[node name="LockOnReticle" parent="." instance=ExtResource("8_reticle")]
 
 [node name="DeathScreen" parent="." instance=ExtResource("5_death")]
 

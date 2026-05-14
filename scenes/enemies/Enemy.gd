@@ -22,6 +22,7 @@ var _original_materials: Array[Material] = []
 var _flash_material: StandardMaterial3D = null
 
 func _ready() -> void:
+	add_to_group("enemy")
 	player = get_tree().get_first_node_in_group("player")
 	_body_meshes = [
 		$Model/Body as MeshInstance3D,

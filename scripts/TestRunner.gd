@@ -28,6 +28,7 @@ func _run_all() -> void:
 	await _test_input_move()
 	await _test_input_dodge()
 	await _test_death_and_respawn()
+	await _test_lock_on()
 	_print_results()
 	get_tree().quit()
 
@@ -100,6 +101,25 @@ func _test_input_dodge() -> void:
 	await _screenshot("input_dodge")
 	Input.action_release("move_forward")
 	await get_tree().create_timer(player.DODGE_DURATION + 0.1).timeout
+
+func _test_lock_on() -> void:
+	await _reset()
+	_assert("lock_target starts null", player.lock_target == null)
+	# Toggle on — enemy is at (5,1,0), player at (0,1,0), within LOCK_RANGE
+	player.call("_toggle_lock")
+	_assert("lock_target set after toggle", player.lock_target != null)
+	await _screenshot("lock_on_active")
+	# Toggle off
+	player.call("_toggle_lock")
+	_assert("lock_target cleared after second toggle", player.lock_target == null)
+	# Auto-cancel when enemy dies
+	player.call("_toggle_lock")
+	_assert("lock reacquired", player.lock_target != null)
+	var enemy: Node = player.lock_target
+	enemy.call("_die")
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	_assert("lock clears when enemy dies", player.lock_target == null)
 
 func _test_death_and_respawn() -> void:
 	await _reset()
